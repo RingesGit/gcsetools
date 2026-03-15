@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Equation Solver — GCSETools</title>
+<meta name="description" content="GCSE physics equation solver. Enter known values and solve for the unknown — with full working shown.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --text: #1a1a18; --muted: #6b6b66;
+    --border: #e2e0d8; --accent: #2d6a4f; --accent-light: #e8f5ee;
+    --radius: 12px; --font-display: 'DM Serif Display', serif; --font-body: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 2rem; border-bottom: 1px solid var(--border);
+    background: var(--surface); position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { text-decoration: none; font-size: 0.9rem; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); font-weight: 500; }
+  .page-header { max-width: 760px; margin: 0 auto; padding: 3rem 2rem 1.5rem; }
+  .page-header h1 { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .page-header p { color: var(--muted); font-size: 0.95rem; }
+  .main { max-width: 760px; margin: 0 auto; padding: 0 2rem 4rem; }
+  select {
+    width: 100%; padding: 11px 14px; font-size: 0.95rem; font-family: var(--font-body);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); color: var(--text); margin-bottom: 1.25rem; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b66' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+  .formula-display {
+    display: inline-block; background: var(--accent-light); color: var(--accent);
+    font-family: monospace; font-size: 1rem; padding: 5px 14px;
+    border-radius: 99px; margin-bottom: 0.75rem;
+  }
+  .topic-tag {
+    display: inline-block; font-size: 0.75rem; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 99px; padding: 2px 10px; margin-bottom: 1rem;
+  }
+  .section-label { font-size: 0.75rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+  .input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .input-row label { font-size: 0.875rem; color: var(--muted); min-width: 150px; }
+  .input-row input {
+    flex: 1; padding: 9px 12px; font-size: 0.9rem; font-family: var(--font-body);
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface); color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .input-row input:focus { outline: none; border-color: var(--accent); }
+  .unit { font-size: 0.8rem; color: var(--muted); min-width: 50px; }
+  .result-box {
+    background: var(--accent-light); border-radius: var(--radius);
+    padding: 1.25rem 1.5rem; margin-top: 1rem;
+  }
+  .result-label { font-size: 0.8rem; color: var(--accent); margin-bottom: 4px; font-weight: 500; }
+  .result-value { font-family: var(--font-display); font-size: 2rem; color: var(--accent); }
+  .working { font-size: 0.8rem; color: var(--accent); margin-top: 6px; opacity: 0.75; font-family: monospace; }
+  .error-box { background: #fef0eb; border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1rem; color: #c1440e; font-size: 0.875rem; }
+  footer { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 600px) { nav { padding: 1rem; } .nav-links { display: none; } .page-header, .main { padding-left: 1.25rem; padding-right: 1.25rem; } .input-row { flex-wrap: wrap; } .input-row label { min-width: 100%; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GCSE<span>Tools</span></a>
+  <div class="nav-links">
+    <a href="physics.html" class="active">Physics solver</a>
+    <a href="maths.html">Maths formulas</a>
+    <a href="technique.html">Exam technique</a>
+  </div>
+</nav>
+<div class="page-header">
+  <h1>Physics equation solver</h1>
+  <p>Pick an equation, enter your known values, leave one blank — and get the answer with full working shown.</p>
+</div>
+<div class="main">
+  <div class="card">
+    <p class="section-label">Choose an equation</p>
+    <select id="eqSelect" onchange="updateEquation()">
+      <optgroup label="Forces & motion">
+        <option value="speed">Speed = distance / time</option>
+        <option value="accel">Acceleration = change in velocity / time</option>
+        <option value="force">Force = mass × acceleration (F = ma)</option>
+        <option value="weight">Weight = mass × gravitational field strength</option>
+        <option value="momentum">Momentum = mass × velocity</option>
+        <option value="ke">Kinetic energy = ½ × mass × velocity²</option>
+      </optgroup>
+      <optgroup label="Energy & power">
+        <option value="work">Work done = force × distance</option>
+        <option value="power">Power = energy / time</option>
+        <option value="gpe">Gravitational PE = mass × g × height</option>
+        <option value="efficiency">Efficiency = useful output / total input × 100</option>
+      </optgroup>
+      <optgroup label="Electricity">
+        <option value="voltage">Voltage = current × resistance (V = IR)</option>
+        <option value="power_elec">Power = voltage × current</option>
+        <option value="charge">Charge = current × time</option>
+        <option value="energy_elec">Energy = power × time</option>
+      </optgroup>
+      <optgroup label="Waves">
+        <option value="wave">Wave speed = frequency × wavelength</option>
+      </optgroup>
+      <optgroup label="Other">
+        <option value="pressure">Pressure = force / area</option>
+        <option value="density">Density = mass / volume</option>
+        <option value="hooke">Force = spring constant × extension (Hooke's law)</option>
+      </optgroup>
+    </select>
+    <div id="formulaDisplay"></div>
+    <div id="topicTag"></div>
+    <p class="section-label">Enter known values — leave one blank to solve for it</p>
+    <div id="inputsArea"></div>
+    <div id="resultArea"></div>
+  </div>
+</div>
+
+<footer>
+  <p>GCSETools — <a href="index.html">Home</a> · <a href="maths.html">Maths formulas</a> · <a href="technique.html">Exam technique</a></p>
+</footer>
+
+<script>
+const equations = {
+  speed:      { formula: "v = d / t", topic: "Forces & motion", vars: [{id:"v",label:"Speed",unit:"m/s"},{id:"d",label:"Distance",unit:"m"},{id:"t",label:"Time",unit:"s"}], solve: {v:(d,t)=>d/t, d:(v,t)=>v*t, t:(d,v)=>d/v}, working: {v:(d,t)=>`${d} ÷ ${t}`, d:(v,t)=>`${v} × ${t}`, t:(d,v)=>`${d} ÷ ${v}`} },
+  accel:      { formula: "a = Δv / t", topic: "Forces & motion", vars: [{id:"a",label:"Acceleration",unit:"m/s²"},{id:"dv",label:"Change in velocity",unit:"m/s"},{id:"t",label:"Time",unit:"s"}], solve: {a:(dv,t)=>dv/t, dv:(a,t)=>a*t, t:(dv,a)=>dv/a}, working: {a:(dv,t)=>`${dv} ÷ ${t}`, dv:(a,t)=>`${a} × ${t}`, t:(dv,a)=>`${dv} ÷ ${a}`} },
+  force:      { formula: "F = m × a", topic: "Forces & motion", vars: [{id:"F",label:"Force",unit:"N"},{id:"m",label:"Mass",unit:"kg"},{id:"a",label:"Acceleration",unit:"m/s²"}], solve: {F:(m,a)=>m*a, m:(F,a)=>F/a, a:(F,m)=>F/m}, working: {F:(m,a)=>`${m} × ${a}`, m:(F,a)=>`${F} ÷ ${a}`, a:(F,m)=>`${F} ÷ ${m}`} },
+  weight:     { formula: "W = m × g", topic: "Forces & motion", vars: [{id:"W",label:"Weight",unit:"N"},{id:"m",label:"Mass",unit:"kg"},{id:"g",label:"Gravitational field strength",unit:"N/kg"}], solve: {W:(m,g)=>m*g, m:(W,g)=>W/g, g:(W,m)=>W/m}, working: {W:(m,g)=>`${m} × ${g}`, m:(W,g)=>`${W} ÷ ${g}`, g:(W,m)=>`${W} ÷ ${m}`} },
+  momentum:   { formula: "p = m × v", topic: "Forces & motion", vars: [{id:"p",label:"Momentum",unit:"kg m/s"},{id:"m",label:"Mass",unit:"kg"},{id:"v",label:"Velocity",unit:"m/s"}], solve: {p:(m,v)=>m*v, m:(p,v)=>p/v, v:(p,m)=>p/m}, working: {p:(m,v)=>`${m} × ${v}`, m:(p,v)=>`${p} ÷ ${v}`, v:(p,m)=>`${p} ÷ ${m}`} },
+  ke:         { formula: "KE = ½mv²", topic: "Energy", vars: [{id:"KE",label:"Kinetic energy",unit:"J"},{id:"m",label:"Mass",unit:"kg"},{id:"v",label:"Velocity",unit:"m/s"}], solve: {KE:(m,v)=>0.5*m*v*v, m:(KE,v)=>2*KE/(v*v), v:(KE,m)=>Math.sqrt(2*KE/m)}, working: {KE:(m,v)=>`½ × ${m} × ${v}²`, m:(KE,v)=>`(2 × ${KE}) ÷ ${v}²`, v:(KE,m)=>`√(2 × ${KE} ÷ ${m})`} },
+  work:       { formula: "W = F × d", topic: "Energy", vars: [{id:"W",label:"Work done",unit:"J"},{id:"F",label:"Force",unit:"N"},{id:"d",label:"Distance",unit:"m"}], solve: {W:(F,d)=>F*d, F:(W,d)=>W/d, d:(W,F)=>W/F}, working: {W:(F,d)=>`${F} × ${d}`, F:(W,d)=>`${W} ÷ ${d}`, d:(W,F)=>`${W} ÷ ${F}`} },
+  power:      { formula: "P = E / t", topic: "Energy", vars: [{id:"P",label:"Power",unit:"W"},{id:"E",label:"Energy",unit:"J"},{id:"t",label:"Time",unit:"s"}], solve: {P:(E,t)=>E/t, E:(P,t)=>P*t, t:(E,P)=>E/P}, working: {P:(E,t)=>`${E} ÷ ${t}`, E:(P,t)=>`${P} × ${t}`, t:(E,P)=>`${E} ÷ ${P}`} },
+  gpe:        { formula: "GPE = m × g × h", topic: "Energy", vars: [{id:"GPE",label:"Gravitational PE",unit:"J"},{id:"m",label:"Mass",unit:"kg"},{id:"g",label:"g (use 9.8 or 10)",unit:"N/kg"},{id:"h",label:"Height",unit:"m"}], solve: {GPE:(m,g,h)=>m*g*h, m:(GPE,g,h)=>GPE/(g*h), g:(GPE,m,h)=>GPE/(m*h), h:(GPE,m,g)=>GPE/(m*g)}, working: {GPE:(m,g,h)=>`${m} × ${g} × ${h}`, m:(GPE,g,h)=>`${GPE} ÷ (${g} × ${h})`, g:(GPE,m,h)=>`${GPE} ÷ (${m} × ${h})`, h:(GPE,m,g)=>`${GPE} ÷ (${m} × ${g})`} },
+  efficiency: { formula: "η = (useful out / total in) × 100", topic: "Energy", vars: [{id:"eff",label:"Efficiency",unit:"%"},{id:"out",label:"Useful output energy",unit:"J"},{id:"inp",label:"Total input energy",unit:"J"}], solve: {eff:(out,inp)=>out/inp*100, out:(eff,inp)=>eff/100*inp, inp:(eff,out)=>out/(eff/100)}, working: {eff:(out,inp)=>`(${out} ÷ ${inp}) × 100`, out:(eff,inp)=>`(${eff} ÷ 100) × ${inp}`, inp:(eff,out)=>`${out} ÷ (${eff} ÷ 100)`} },
+  voltage:    { formula: "V = I × R", topic: "Electricity", vars: [{id:"V",label:"Voltage",unit:"V"},{id:"I",label:"Current",unit:"A"},{id:"R",label:"Resistance",unit:"Ω"}], solve: {V:(I,R)=>I*R, I:(V,R)=>V/R, R:(V,I)=>V/I}, working: {V:(I,R)=>`${I} × ${R}`, I:(V,R)=>`${V} ÷ ${R}`, R:(V,I)=>`${V} ÷ ${I}`} },
+  power_elec: { formula: "P = V × I", topic: "Electricity", vars: [{id:"P",label:"Power",unit:"W"},{id:"V",label:"Voltage",unit:"V"},{id:"I",label:"Current",unit:"A"}], solve: {P:(V,I)=>V*I, V:(P,I)=>P/I, I:(P,V)=>P/V}, working: {P:(V,I)=>`${V} × ${I}`, V:(P,I)=>`${P} ÷ ${I}`, I:(P,V)=>`${P} ÷ ${V}`} },
+  charge:     { formula: "Q = I × t", topic: "Electricity", vars: [{id:"Q",label:"Charge",unit:"C"},{id:"I",label:"Current",unit:"A"},{id:"t",label:"Time",unit:"s"}], solve: {Q:(I,t)=>I*t, I:(Q,t)=>Q/t, t:(Q,I)=>Q/I}, working: {Q:(I,t)=>`${I} × ${t}`, I:(Q,t)=>`${Q} ÷ ${t}`, t:(Q,I)=>`${Q} ÷ ${I}`} },
+  energy_elec:{ formula: "E = P × t", topic: "Electricity", vars: [{id:"E",label:"Energy",unit:"J"},{id:"P",label:"Power",unit:"W"},{id:"t",label:"Time",unit:"s"}], solve: {E:(P,t)=>P*t, P:(E,t)=>E/t, t:(E,P)=>E/P}, working: {E:(P,t)=>`${P} × ${t}`, P:(E,t)=>`${E} ÷ ${t}`, t:(E,P)=>`${E} ÷ ${P}`} },
+  wave:       { formula: "v = f × λ", topic: "Waves", vars: [{id:"v",label:"Wave speed",unit:"m/s"},{id:"f",label:"Frequency",unit:"Hz"},{id:"lam",label:"Wavelength",unit:"m"}], solve: {v:(f,lam)=>f*lam, f:(v,lam)=>v/lam, lam:(v,f)=>v/f}, working: {v:(f,lam)=>`${f} × ${lam}`, f:(v,lam)=>`${v} ÷ ${lam}`, lam:(v,f)=>`${v} ÷ ${f}`} },
+  pressure:   { formula: "P = F / A", topic: "Forces", vars: [{id:"P",label:"Pressure",unit:"Pa"},{id:"F",label:"Force",unit:"N"},{id:"A",label:"Area",unit:"m²"}], solve: {P:(F,A)=>F/A, F:(P,A)=>P*A, A:(F,P)=>F/P}, working: {P:(F,A)=>`${F} ÷ ${A}`, F:(P,A)=>`${P} × ${A}`, A:(F,P)=>`${F} ÷ ${P}`} },
+  density:    { formula: "ρ = m / V", topic: "Matter", vars: [{id:"rho",label:"Density",unit:"kg/m³"},{id:"m",label:"Mass",unit:"kg"},{id:"V",label:"Volume",unit:"m³"}], solve: {rho:(m,V)=>m/V, m:(rho,V)=>rho*V, V:(m,rho)=>m/rho}, working: {rho:(m,V)=>`${m} ÷ ${V}`, m:(rho,V)=>`${rho} × ${V}`, V:(m,rho)=>`${m} ÷ ${rho}`} },
+  hooke:      { formula: "F = k × x", topic: "Forces", vars: [{id:"F",label:"Force",unit:"N"},{id:"k",label:"Spring constant",unit:"N/m"},{id:"x",label:"Extension",unit:"m"}], solve: {F:(k,x)=>k*x, k:(F,x)=>F/x, x:(F,k)=>F/k}, working: {F:(k,x)=>`${k} × ${x}`, k:(F,x)=>`${F} ÷ ${x}`, x:(F,k)=>`${F} ÷ ${k}`} },
+};
+
+let currentEq = null;
+function updateEquation() {
+  const key = document.getElementById('eqSelect').value;
+  currentEq = equations[key];
+  document.getElementById('formulaDisplay').innerHTML = `<div class="formula-display">${currentEq.formula}</div>`;
+  document.getElementById('topicTag').innerHTML = `<span class="topic-tag">${currentEq.topic}</span><br><br>`;
+  let html = '';
+  currentEq.vars.forEach(v => {
+    html += `<div class="input-row"><label for="inp_${v.id}">${v.label}</label><input type="number" id="inp_${v.id}" placeholder="?" oninput="tryCalculate()" /><span class="unit">${v.unit}</span></div>`;
+  });
+  document.getElementById('inputsArea').innerHTML = html;
+  document.getElementById('resultArea').innerHTML = '';
+}
+function tryCalculate() {
+  const eq = currentEq; if (!eq) return;
+  const filled = {}; const blank = [];
+  eq.vars.forEach(v => { const val = parseFloat(document.getElementById('inp_' + v.id).value); if (!isNaN(val)) filled[v.id] = val; else blank.push(v); });
+  const resultArea = document.getElementById('resultArea');
+  if (blank.length === 1 && Object.keys(filled).length === eq.vars.length - 1) {
+    const target = blank[0];
+    const args = eq.vars.filter(v => v.id !== target.id).map(v => filled[v.id]);
+    const result = eq.solve[target.id](...args);
+    const workStr = eq.working[target.id] ? eq.working[target.id](...args) : '';
+    if (isNaN(result) || !isFinite(result)) { resultArea.innerHTML = `<div class="error-box">Check your values — can't divide by zero.</div>`; return; }
+    resultArea.innerHTML = `<div class="result-box"><p class="result-label">Solving for ${target.label}</p><p class="result-value">${parseFloat(result.toFixed(4))} ${target.unit}</p><p class="working">Working: ${workStr} = ${parseFloat(result.toFixed(4))}</p></div>`;
+  } else if (blank.length === 0) {
+    resultArea.innerHTML = `<div class="error-box">Leave one field blank to solve for it.</div>`;
+  } else { resultArea.innerHTML = ''; }
+}
+updateEquation();
+</script>
+</body>
+</html>

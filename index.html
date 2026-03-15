@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSETools — Free revision tools for GCSE students</title>
+<meta name="description" content="Free GCSE revision tools — physics equation solver, maths formula sheet, and exam technique guide. Built by a student, for students.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --text: #1a1a18;
+    --muted: #6b6b66;
+    --border: #e2e0d8;
+    --accent: #2d6a4f;
+    --accent-light: #e8f5ee;
+    --accent2: #e76f51;
+    --accent3: #457b9d;
+    --radius: 12px;
+    --font-display: 'DM Serif Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 2rem; border-bottom: 1px solid var(--border);
+    background: var(--surface); position: sticky; top: 0; z-index: 100;
+  }
+  .nav-logo { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { text-decoration: none; font-size: 0.9rem; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    max-width: 860px; margin: 0 auto; padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block; background: var(--accent-light); color: var(--accent);
+    font-size: 0.8rem; font-weight: 500; padding: 4px 14px;
+    border-radius: 99px; margin-bottom: 1.5rem; letter-spacing: 0.04em;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.15; color: var(--text); margin-bottom: 1.25rem;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p {
+    font-size: 1.1rem; color: var(--muted); max-width: 520px;
+    margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff; padding: 0.85rem 2rem;
+    border-radius: 99px; text-decoration: none; font-size: 0.95rem;
+    font-weight: 500; transition: opacity 0.2s;
+  }
+  .hero-cta:hover { opacity: 0.88; }
+
+  .tools-section { max-width: 960px; margin: 0 auto; padding: 2rem 2rem 5rem; }
+  .tools-section h2 {
+    font-family: var(--font-display); font-size: 1.9rem;
+    margin-bottom: 0.5rem; color: var(--text);
+  }
+  .tools-section .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+
+  .tool-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem;
+    text-decoration: none; color: var(--text);
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .tool-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+
+  .tool-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .icon-green { background: var(--accent-light); }
+  .icon-orange { background: #fef0eb; }
+  .icon-blue { background: #e8f1f8; }
+
+  .tool-card h3 { font-size: 1.1rem; font-weight: 500; }
+  .tool-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+  .tool-link { font-size: 0.85rem; color: var(--accent); font-weight: 500; margin-top: auto; }
+
+  .stats-bar {
+    background: var(--text); color: #fff;
+    padding: 2.5rem 2rem; text-align: center;
+  }
+  .stats-inner { max-width: 700px; margin: 0 auto; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+  .stat-item .num { font-family: var(--font-display); font-size: 2.2rem; color: #fff; }
+  .stat-item .label { font-size: 0.85rem; color: #aaa; margin-top: 2px; }
+
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.85rem; color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .tools-section { padding: 1.5rem 1.25rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">GCSE<span>Tools</span></a>
+  <div class="nav-links">
+    <a href="physics.html">Physics solver</a>
+    <a href="maths.html">Maths formulas</a>
+    <a href="technique.html">Exam technique</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Free — no login needed</div>
+  <h1>Revision tools that actually <em>help</em></h1>
+  <p>Built by a student, for students. Solve physics equations, look up maths formulas, and learn how to pick up every mark available.</p>
+  <a class="hero-cta" href="physics.html">Try the physics solver →</a>
+</section>
+
+<section class="tools-section">
+  <h2>The tools</h2>
+  <p class="subtitle">Three free tools covering the most common exam pain points.</p>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="physics.html">
+      <div class="tool-icon icon-green">⚛️</div>
+      <h3>Physics equation solver</h3>
+      <p>Enter your known values and solve for the unknown. Shows full working — 18 equations covered.</p>
+      <span class="tool-link">Open solver →</span>
+    </a>
+
+    <a class="tool-card" href="maths.html">
+      <div class="tool-icon icon-orange">📐</div>
+      <h3>Maths formula sheet</h3>
+      <p>Every GCSE maths formula in one place. Searchable, filterable by topic, and marks which ones are given in the exam.</p>
+      <span class="tool-link">Open formulas →</span>
+    </a>
+
+    <a class="tool-card" href="technique.html">
+      <div class="tool-icon icon-blue">🎯</div>
+      <h3>Exam technique guide</h3>
+      <p>How to pick up every mark available — from showing working to handling questions you're stuck on.</p>
+      <span class="tool-link">Open guide →</span>
+    </a>
+
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="num">18</div>
+      <div class="label">Physics equations</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">40+</div>
+      <div class="label">Maths formulas</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">25+</div>
+      <div class="label">Exam tips</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">100%</div>
+      <div class="label">Free, forever</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>GCSETools — built for students, by a student. <a href="index.html">Home</a> · <a href="physics.html">Physics</a> · <a href="maths.html">Maths</a> · <a href="technique.html">Technique</a></p>
+</footer>
+
+</body>
+</html>

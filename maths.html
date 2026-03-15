@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths Formula Sheet — GCSETools</title>
+<meta name="description" content="Every GCSE maths formula in one place. Searchable and filterable by topic.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --text: #1a1a18; --muted: #6b6b66;
+    --border: #e2e0d8; --accent: #2d6a4f; --accent-light: #e8f5ee;
+    --accent2: #e76f51; --radius: 12px;
+    --font-display: 'DM Serif Display', serif; --font-body: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { text-decoration: none; font-size: 0.9rem; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); font-weight: 500; }
+  .page-header { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 1.5rem; }
+  .page-header h1 { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .page-header p { color: var(--muted); font-size: 0.95rem; }
+  .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+  .search-bar {
+    width: 100%; padding: 11px 14px; font-size: 0.95rem; font-family: var(--font-body);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); color: var(--text); margin-bottom: 1rem;
+  }
+  .search-bar:focus { outline: none; border-color: var(--accent); }
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .filter-btn {
+    font-size: 0.8rem; padding: 5px 14px; border: 1px solid var(--border);
+    border-radius: 99px; background: var(--surface); color: var(--muted);
+    cursor: pointer; font-family: var(--font-body); transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent-light); font-weight: 500; }
+  .topic-section { margin-bottom: 2rem; }
+  .topic-heading { font-size: 0.75rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .formula-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+  .formula-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .formula-name { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .formula-eq { font-size: 1rem; font-weight: 500; font-family: monospace; color: var(--text); }
+  .formula-note { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+  .given-badge { font-size: 0.7rem; padding: 2px 7px; border-radius: 99px; background: var(--accent-light); color: var(--accent); }
+  .no-results { font-size: 0.9rem; color: var(--muted); padding: 2rem 0; text-align: center; }
+  footer { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 600px) { nav { padding: 1rem; } .nav-links { display: none; } .page-header, .main { padding-left: 1.25rem; padding-right: 1.25rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GCSE<span>Tools</span></a>
+  <div class="nav-links">
+    <a href="physics.html">Physics solver</a>
+    <a href="maths.html" class="active">Maths formulas</a>
+    <a href="technique.html">Exam technique</a>
+  </div>
+</nav>
+<div class="page-header">
+  <h1>Maths formula sheet</h1>
+  <p>Every GCSE maths formula in one place. Ones marked <span style="background:var(--accent-light);color:var(--accent);font-size:0.75rem;padding:2px 7px;border-radius:99px;">given</span> are provided in the exam.</p>
+</div>
+<div class="main">
+  <input class="search-bar" type="text" id="searchInput" placeholder="Search formulas, e.g. 'area' or 'quadratic'..." oninput="render()" />
+  <div class="filter-bar" id="filterBar"></div>
+  <div id="output"></div>
+</div>
+<footer><p>GCSETools — <a href="index.html">Home</a> · <a href="physics.html">Physics solver</a> · <a href="technique.html">Exam technique</a></p></footer>
+<script>
+const data = [
+  { topic: "Algebra", name: "Quadratic formula", eq: "x = (−b ± √(b²−4ac)) / 2a", note: "For ax² + bx + c = 0", given: true },
+  { topic: "Algebra", name: "Difference of two squares", eq: "a² − b² = (a+b)(a−b)", note: "" },
+  { topic: "Algebra", name: "Completing the square", eq: "x² + bx = (x + b/2)² − (b/2)²", note: "" },
+  { topic: "Algebra", name: "nth term (linear)", eq: "aₙ = a + (n−1)d", note: "a = first term, d = common difference" },
+  { topic: "Algebra", name: "Sum of arithmetic series", eq: "S = n/2 × (2a + (n−1)d)", note: "" },
+  { topic: "Number", name: "Percentage change", eq: "% change = (change / original) × 100", note: "" },
+  { topic: "Number", name: "Reverse percentage", eq: "original = value / (1 ± %/100)", note: "" },
+  { topic: "Number", name: "Compound interest", eq: "A = P(1 + r/100)ⁿ", note: "P = principal, r = rate, n = years" },
+  { topic: "Number", name: "Simple interest", eq: "I = PRT / 100", note: "P = principal, R = rate, T = time" },
+  { topic: "Ratio & proportion", name: "Direct proportion", eq: "y = kx", note: "k is the constant of proportionality" },
+  { topic: "Ratio & proportion", name: "Inverse proportion", eq: "y = k / x", note: "" },
+  { topic: "Geometry — area", name: "Area of rectangle", eq: "A = l × w", note: "" },
+  { topic: "Geometry — area", name: "Area of triangle", eq: "A = ½ × b × h", note: "" },
+  { topic: "Geometry — area", name: "Area of trapezium", eq: "A = ½(a + b) × h", note: "a, b = parallel sides", given: true },
+  { topic: "Geometry — area", name: "Area of circle", eq: "A = πr²", note: "" },
+  { topic: "Geometry — area", name: "Area of parallelogram", eq: "A = b × h", note: "" },
+  { topic: "Geometry — area", name: "Area of sector", eq: "A = (θ/360) × πr²", note: "θ = angle in degrees" },
+  { topic: "Geometry — volume", name: "Volume of cuboid", eq: "V = l × w × h", note: "" },
+  { topic: "Geometry — volume", name: "Volume of prism", eq: "V = area of cross-section × l", note: "" },
+  { topic: "Geometry — volume", name: "Volume of cylinder", eq: "V = πr²h", note: "" },
+  { topic: "Geometry — volume", name: "Volume of cone", eq: "V = ⅓πr²h", note: "", given: true },
+  { topic: "Geometry — volume", name: "Volume of sphere", eq: "V = (4/3)πr³", note: "", given: true },
+  { topic: "Geometry — volume", name: "Volume of pyramid", eq: "V = ⅓ × base area × h", note: "" },
+  { topic: "Geometry — surface area", name: "Surface area of cylinder", eq: "SA = 2πr² + 2πrh", note: "" },
+  { topic: "Geometry — surface area", name: "Curved surface area of cone", eq: "SA = πrl", note: "l = slant height", given: true },
+  { topic: "Geometry — surface area", name: "Surface area of sphere", eq: "SA = 4πr²", note: "", given: true },
+  { topic: "Circles", name: "Circumference", eq: "C = 2πr = πd", note: "" },
+  { topic: "Circles", name: "Arc length", eq: "L = (θ/360) × 2πr", note: "" },
+  { topic: "Trigonometry", name: "SOH CAH TOA", eq: "sin θ = O/H,  cos θ = A/H,  tan θ = O/A", note: "" },
+  { topic: "Trigonometry", name: "Sine rule", eq: "a/sin A = b/sin B = c/sin C", note: "", given: true },
+  { topic: "Trigonometry", name: "Cosine rule", eq: "a² = b² + c² − 2bc cos A", note: "", given: true },
+  { topic: "Trigonometry", name: "Area using sine", eq: "A = ½ab sin C", note: "", given: true },
+  { topic: "Trigonometry", name: "Pythagoras' theorem", eq: "a² + b² = c²", note: "c = hypotenuse" },
+  { topic: "Statistics", name: "Mean", eq: "x̄ = Σx / n", note: "" },
+  { topic: "Statistics", name: "Mean from frequency table", eq: "x̄ = Σfx / Σf", note: "" },
+  { topic: "Statistics", name: "Probability", eq: "P(A) = favourable outcomes / total outcomes", note: "" },
+  { topic: "Statistics", name: "Combined probability (independent)", eq: "P(A and B) = P(A) × P(B)", note: "" },
+  { topic: "Vectors", name: "Magnitude of vector", eq: "|v| = √(x² + y²)", note: "For vector (x, y)" },
+  { topic: "Vectors", name: "Midpoint of two vectors", eq: "M = ½(a + b)", note: "" },
+];
+const topics = [...new Set(data.map(f => f.topic))];
+let active = "All";
+function buildFilters() {
+  document.getElementById('filterBar').innerHTML = ["All", ...topics].map(t =>
+    `<button class="filter-btn ${t === active ? 'active' : ''}" onclick="setFilter('${t}')">${t}</button>`
+  ).join('');
+}
+function setFilter(t) { active = t; buildFilters(); render(); }
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = data.filter(f => (active === "All" || f.topic === active) && (!q || f.name.toLowerCase().includes(q) || f.eq.toLowerCase().includes(q) || f.topic.toLowerCase().includes(q) || (f.note && f.note.toLowerCase().includes(q))));
+  if (!filtered.length) { document.getElementById('output').innerHTML = '<p class="no-results">No formulas match your search.</p>'; return; }
+  const grouped = {};
+  filtered.forEach(f => { if (!grouped[f.topic]) grouped[f.topic] = []; grouped[f.topic].push(f); });
+  document.getElementById('output').innerHTML = Object.keys(grouped).map(topic =>
+    `<div class="topic-section"><p class="topic-heading">${topic}</p><div class="formula-grid">${grouped[topic].map(f =>
+      `<div class="formula-card"><p class="formula-name">${f.name}${f.given ? '<span class="given-badge">given</span>' : ''}</p><p class="formula-eq">${f.eq}</p>${f.note ? `<p class="formula-note">${f.note}</p>` : ''}</div>`
+    ).join('')}</div></div>`
+  ).join('');
+}
+buildFilters(); render();
+</script>
+</body>
+</html>

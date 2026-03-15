@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Technique Guide — GCSETools</title>
+<meta name="description" content="How to pick up every mark available in your GCSE exams. Tips on timing, showing working, handling hard questions, and subject-specific advice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --text: #1a1a18; --muted: #6b6b66;
+    --border: #e2e0d8; --accent: #2d6a4f; --accent-light: #e8f5ee;
+    --accent2: #e76f51; --accent3: #457b9d; --radius: 12px;
+    --font-display: 'DM Serif Display', serif; --font-body: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { text-decoration: none; font-size: 0.9rem; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); font-weight: 500; }
+  .page-header { max-width: 760px; margin: 0 auto; padding: 3rem 2rem 1.5rem; }
+  .page-header h1 { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .page-header p { color: var(--muted); font-size: 0.95rem; }
+  .main { max-width: 760px; margin: 0 auto; padding: 0 2rem 4rem; }
+  .tab-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .tab-btn { font-size: 0.8rem; padding: 6px 14px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--muted); cursor: pointer; font-family: var(--font-body); transition: all 0.15s; }
+  .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tab-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent-light); font-weight: 500; }
+  .tip-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 10px; display: flex; gap: 14px; }
+  .tip-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .tip-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; }
+  .tip-body { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+  .tip-tag { display: inline-block; font-size: 0.72rem; padding: 2px 9px; border-radius: 99px; margin-top: 8px; font-weight: 500; }
+  .tag-marks { background: var(--accent-light); color: var(--accent); }
+  .tag-time { background: #fef9ec; color: #92620a; }
+  .tag-mistake { background: #fef0eb; color: #c1440e; }
+  .tag-mindset { background: #e8f1f8; color: #1d5a82; }
+  .subject-pill { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); margin-top: 6px; margin-right: 4px; }
+  footer { text-align: center; padding: 2rem; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 600px) { nav { padding: 1rem; } .nav-links { display: none; } .page-header, .main { padding-left: 1.25rem; padding-right: 1.25rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GCSE<span>Tools</span></a>
+  <div class="nav-links">
+    <a href="physics.html">Physics solver</a>
+    <a href="maths.html">Maths formulas</a>
+    <a href="technique.html" class="active">Exam technique</a>
+  </div>
+</nav>
+<div class="page-header">
+  <h1>Exam technique guide</h1>
+  <p>How to pick up every mark available — even when you're unsure of the answer.</p>
+</div>
+<div class="main">
+  <div class="tab-bar" id="tabBar"></div>
+  <div id="output"></div>
+</div>
+<footer><p>GCSETools — <a href="index.html">Home</a> · <a href="physics.html">Physics solver</a> · <a href="maths.html">Maths formulas</a></p></footer>
+<script>
+const tips = {
+  "Before the exam": [
+    { icon: "📋", title: "Read the whole paper first", body: "Spend the first 2–3 minutes flicking through every question. Flag easy ones to do first and hard ones to leave until last. This stops you spending 10 minutes on a hard question and running out of time for easy marks.", tag: "tag-time", tagLabel: "time saver" },
+    { icon: "⏱", title: "Plan your time per question", body: "A rough rule: 1 mark = 1 minute. A 6-mark question should take around 6 minutes. If you're spending more than double the mark allocation on one question, move on and come back.", tag: "tag-time", tagLabel: "time saver" },
+    { icon: "✏️", title: "Bring the right equipment", body: "For maths and science: calculator, ruler, protractor, compass, pen and pencil. Many students lose marks simply because they can't draw accurate diagrams. Check the night before.", tag: "tag-marks", tagLabel: "easy marks" },
+  ],
+  "Picking up marks": [
+    { icon: "💡", title: "Always show your working", body: "In maths and science, you can get method marks even if your final answer is wrong. Write every step clearly. A wrong answer with clear working can still earn 2 out of 3 marks.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "🔢", title: "Write units — always", body: "Forgetting units (m/s, kg, °C etc.) is one of the most common ways to drop marks. After every numerical answer, ask yourself: have I written the unit?", tag: "tag-mistake", tagLabel: "common mistake" },
+    { icon: "📝", title: "Match your answer length to the marks", body: "If a question is worth 4 marks, you need to make 4 separate points. A one-sentence answer will not get full marks. Count your points before moving on.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "🔍", title: "Use keywords from the question", body: "Examiners mark against a mark scheme. If the question uses the word 'explain', your answer must include a cause and an effect. If it says 'describe', just state what happens. Match their language.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "📊", title: "For graph questions — use a ruler", body: "Freehand lines lose marks. Always use a ruler for straight lines and label your axes with units. For best-fit lines, make sure roughly equal numbers of points are above and below the line.", tag: "tag-mistake", tagLabel: "common mistake" },
+    { icon: "🧮", title: "Check your calculator answers make sense", body: "If you calculate that a car is travelling at 0.003 m/s or 50,000 m/s, something has gone wrong. Always ask: is this a realistic number? A quick sense-check catches most errors.", tag: "tag-mistake", tagLabel: "common mistake" },
+  ],
+  "Hard questions": [
+    { icon: "🤔", title: "Never leave a question blank", body: "You cannot lose marks for a wrong answer in GCSE (no negative marking). An attempt is always better than nothing. Even writing the formula you think applies might get you a method mark.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "🔄", title: "Write down what you know", body: "If you're stuck, write down everything relevant you know about the topic. Often the act of writing triggers the connection you need — and partial credit is real.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "📐", title: "Draw a diagram if you're stuck", body: "For geometry, forces, or any spatial problem — draw it. Label everything you know. Often the answer becomes obvious once it's visual.", tag: "tag-marks", tagLabel: "easy marks" },
+    { icon: "⏭", title: "Skip and come back", body: "If you've spent more than twice the mark-worth of time on a question, circle it and move on. Come back at the end. A fresh look often unlocks it — and you'll have secured the easier marks elsewhere.", tag: "tag-time", tagLabel: "time saver" },
+  ],
+  "Subject-specific": [
+    { icon: "➗", title: "Maths: write the formula before substituting", body: "Write the formula first (e.g. A = πr²), then substitute numbers, then calculate. This gets you the method mark even if you press the wrong button on your calculator.", tag: "tag-marks", tagLabel: "easy marks", subjects: ["Maths"] },
+    { icon: "⚗️", title: "Science: use 'because' and 'therefore'", body: "For explain questions, train yourself to write: '[observation] because [reason] therefore [effect].' This structure almost always hits the mark scheme points for 3-mark science questions.", tag: "tag-marks", tagLabel: "easy marks", subjects: ["Biology", "Chemistry", "Physics"] },
+    { icon: "📖", title: "English: quote then analyse", body: "Point → Evidence → Explain (PEE). Never drop a quote without analysing it. One well-analysed quote is worth more than three quotes with no analysis.", tag: "tag-marks", tagLabel: "easy marks", subjects: ["English"] },
+    { icon: "🌍", title: "Geography/History: use named case studies", body: "Named examples pick up marks that vague answers never will. 'A coastal town in the UK' gets nothing. 'Happisburgh in Norfolk' gets the mark. Learn your case study names.", tag: "tag-marks", tagLabel: "easy marks", subjects: ["Geography", "History"] },
+    { icon: "🔬", title: "Science: learn your required practicals", body: "At least one question per science paper will be about a required practical. Learn the method, equipment, variables (independent, dependent, control) and how to improve accuracy.", tag: "tag-marks", tagLabel: "easy marks", subjects: ["Biology", "Chemistry", "Physics"] },
+  ],
+  "Mindset": [
+    { icon: "😤", title: "Feeling stuck is normal — don't panic", body: "Everyone hits a question they don't know. The students who do best are the ones who don't let one hard question derail the rest of the paper. Take a breath, skip it, and move on.", tag: "tag-mindset", tagLabel: "mindset" },
+    { icon: "✅", title: "Check your work — but smartly", body: "If you finish early, don't just re-read answers. Re-do calculations from scratch on a fresh line. Re-reading your own work rarely catches errors because your brain auto-corrects. Redoing does.", tag: "tag-mistake", tagLabel: "common mistake" },
+    { icon: "🎯", title: "The last 10 minutes matter most", body: "Use the last 10 minutes to: check units, check you've answered every part (a, b, c), and attempt any blanks. These are the easiest marks to recover at the end.", tag: "tag-marks", tagLabel: "easy marks" },
+  ],
+};
+const tabs = Object.keys(tips);
+let active = tabs[0];
+function buildTabs() {
+  document.getElementById('tabBar').innerHTML = tabs.map(t =>
+    `<button class="tab-btn ${t === active ? 'active' : ''}" onclick="setTab('${t}')">${t}</button>`
+  ).join('');
+}
+function setTab(t) { active = t; buildTabs(); render(); }
+function render() {
+  document.getElementById('output').innerHTML = tips[active].map(tip =>
+    `<div class="tip-card">
+      <div class="tip-icon">${tip.icon}</div>
+      <div>
+        <p class="tip-title">${tip.title}</p>
+        <p class="tip-body">${tip.body}</p>
+        <span class="tip-tag ${tip.tag}">${tip.tagLabel}</span>
+        ${tip.subjects ? tip.subjects.map(s => `<span class="subject-pill">${s}</span>`).join('') : ''}
+      </div>
+    </div>`
+  ).join('');
+}
+buildTabs(); render();
+</script>
+</body>
+</html>
